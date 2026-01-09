@@ -10,7 +10,11 @@ This project investigates the implicit bias of optimization algorithms in deep n
 
 > **Do adaptive and sign-based optimizers induce fundamentally different implicit margin biases than gradient descent in deep, non-linear networks?**
 
-We reproduce classical implicit bias results in linear models and extend them empirically to deeper, non-linear networks where theory does not fully apply.
+---
+
+## Contribution
+
+This repository provides an empirical extension of implicit bias theory to deep, non-linear networks. It demonstrates where classical margin theory holds and where it systematically deviates in overparameterized regimes.
 
 ---
 
@@ -18,45 +22,24 @@ We reproduce classical implicit bias results in linear models and extend them em
 
 For binary classification, the **normalized margin** is defined as:
 
-$$\gamma = \frac{\min_i \; y_i \, f(x_i)}{\lVert w \rVert_p}$$
+$$
+\gamma = \frac{\min_i\, y_i\, f(x_i)}{\lVert w \rVert_p}
+$$
 
 where:
-- **p = 2** for GD/SGD (ℓ₂-margin)
-- **p = ∞** for Adam/Lion (ℓ∞-margin)
+- \(p = 2\) for GD/SGD (ℓ₂-margin)
+- \(p = \infty\) for Adam/Lion (ℓ∞-margin)
 
 ---
 
 ## Key Theoretical Results
 
 | Optimizer | Implicit Bias | Margin Type |
-|---|---|---|
-| GD | Converges to max ℓ₂-margin solution | Euclidean |
-| Adam | Converges to max ℓ∞-margin solution | Component-wise |
-| Lion | Sign-based updates (ℓ∞-like) | Component-wise |
-| SGD | Similar to GD + noise | Euclidean |
-
-### Empirical Contribution
-
-Our experiments confirm classical margin behavior in linear models and demonstrate systematic deviations in deep, non-linear networks, particularly under ReLU and GELU activations. These deviations correlate with architecture depth, suggesting implicit bias is not optimizer-dependent alone.
-
----
-
-## Empirical Takeaways
-
-Across deep non-linear models:
-- GD and SGD maintain classical margin trends.
-- Adaptive and sign-based optimizers show systematic deviations in margin dynamics.
-- Depth and activation non-linearities amplify implicit bias shifts.
-
----
-
-## Evaluation Metrics
-
-| Setting | Metric | Interpretation |
-|---|---|---|
-| Linear | Normalized margin | Implicit bias alignment |
-| Deep | Margin evolution | Generalization proxy |
-| Counter-examples | Divergence | Architecture effect |
+|-----------|--------------|-------------|
+| GD        | Converges to max ℓ₂-margin solution | Euclidean |
+| Adam      | Converges to max ℓ∞-margin solution | Component-wise |
+| Lion      | Sign-based updates (ℓ∞-like) | Component-wise |
+| SGD       | Similar to GD with noise | Euclidean |
 
 ---
 
@@ -67,24 +50,16 @@ Across deep non-linear models:
 3. **Nonlinear Activations** - ReLU, Tanh, GELU comparisons
 4. **Counter-Examples** - Cases where theory breaks down
 
-> **Key Finding:** In certain overparameterized nonlinear regimes, we observe deviations from predicted margin behavior, suggesting architectural dependence of implicit bias.
-
 ---
 
 ## Expected Results Summary
 
-You should observe:
-- Linear settings match classic theory.
-- Depth increases margin deviation under Adam and Lion.
-- ReLU nets diverge more than Tanh/GELU.
+Running the experiments should result in observations like:
 
----
-
-## Visualization Summary
-
-- **Margin Dynamics:** Plots show normalized margin differences between optimizers across training epochs.
-- **Depth Trends:** Margin trends vary significantly with network depth in non-linear settings.
-- **Activation Effects:** ReLU networks diverge more from classical bias predictions than Tanh/GELU.
+- Linear models replicate classical ℓ₂ and ℓ∞ margin behaviors.
+- Deeper architectures (with ReLU, GELU) show systematic deviations from classical theory.
+- Optimizer noise (SGD) increases variance in margin trajectories.
+- Counter-example settings highlight architecture-driven implicit bias shifts.
 
 ---
 
@@ -100,9 +75,11 @@ python experiments/04_counter_examples.py
 
 ---
 
-## Reproducibility
+## Limitations & Future Work
 
-Experiments are run with fixed seeds (default: 42). Results and plots are saved to `results/`.
+- The current study is empirical and does not provide formal convergence guarantees in deep nonlinear regimes.
+- Observed deviations may depend on specific architectures and datasets.
+- A theoretical analysis of Lion's implicit bias remains open and is a direction for future work.
 
 ---
 
@@ -124,11 +101,9 @@ ImplicitBias-DNN/
 
 ---
 
-## Limitations
+## Reproducibility Notes
 
-- Results are empirical and do not provide formal convergence guarantees.
-- Observed deviations may depend on architecture choices and data distributions.
-- The current setup uses synthetic datasets; real data generalization remains untested.
+All experiments are run with fixed seeds (default: 0–4) to estimate variance. Results and plots are saved under the `results/` directory. Each script prints summary stats for easy inspection.
 
 ---
 
@@ -137,8 +112,8 @@ ImplicitBias-DNN/
 If you use this work, please cite:
 
 ```bibtex
-@misc{ImplicitBias-DNN2026,
-  title={DeepImplicitBias: Investigating Implicit Biases of Optimizers in Deep Networks},
+@misc{cheema2026implicitbias,
+  title={DeepImplicitBias: Investigating Implicit Bias in Deep Neural Networks},
   author={Hassan Cheema},
   year={2026},
   note={GitHub repository: https://github.com/Hassan-Cheema/ImplicitBias-DNN}
