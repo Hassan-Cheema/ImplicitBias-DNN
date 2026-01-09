@@ -18,7 +18,7 @@ We reproduce classical implicit bias results in linear models and extend them em
 
 For binary classification, the **normalized margin** is defined as:
 
-$$\gamma = \frac{\min_i \, y_i \cdot f(x_i)}{\|w\|_p}$$
+$$\gamma = \frac{\min_i \; y_i \, f(x_i)}{\lVert w \rVert_p}$$
 
 where:
 - **p = 2** for GD/SGD (ℓ₂-margin)
@@ -29,11 +29,11 @@ where:
 ## Key Theoretical Results
 
 | Optimizer | Implicit Bias | Margin Type |
-|-----------|--------------|-------------|
-| GD        | Converges to max ℓ₂-margin solution | Euclidean |
-| Adam      | Converges to max ℓ∞-margin solution | Component-wise |
-| Lion      | Sign-based updates (ℓ∞-like) | Component-wise |
-| SGD       | Similar to GD + noise | Euclidean |
+|---|---|---|
+| GD | Converges to max ℓ₂-margin solution | Euclidean |
+| Adam | Converges to max ℓ∞-margin solution | Component-wise |
+| Lion | Sign-based updates (ℓ∞-like) | Component-wise |
+| SGD | Similar to GD + noise | Euclidean |
 
 ### Empirical Contribution
 
@@ -53,7 +53,7 @@ Across deep non-linear models:
 ## Evaluation Metrics
 
 | Setting | Metric | Interpretation |
-|---------|--------|----------------|
+|---|---|---|
 | Linear | Normalized margin | Implicit bias alignment |
 | Deep | Margin evolution | Generalization proxy |
 | Counter-examples | Divergence | Architecture effect |
@@ -100,10 +100,16 @@ python experiments/04_counter_examples.py
 
 ---
 
+## Reproducibility
+
+Experiments are run with fixed seeds (default: 42). Results and plots are saved to `results/`.
+
+---
+
 ## Project Structure
 
 ```
-IBODN/
+ImplicitBias-DNN/
 ├── src/                    # Core modules
 │   ├── models.py          # Neural network architectures
 │   ├── optimizers.py      # Custom optimizers (GD, Lion)
